@@ -1,0 +1,39 @@
+interface User {
+  id: string;
+  email: string;
+  password: string;
+  createdAt?: string;
+  [key: string]: any;
+}
+
+export const storage = {
+  getMockedUsers(): User[] {
+    return JSON.parse(localStorage.getItem("mockedUsers") || "[]");
+  },
+
+  setMockedUsers(users: User[]): void {
+    localStorage.setItem("mockedUsers", JSON.stringify(users));
+  },
+
+  getLocalUsers(): User[] {
+    return JSON.parse(localStorage.getItem("localUsers") || "[]");
+  },
+
+  setLocalUsers(users: User[]): void {
+    localStorage.setItem("localUsers", JSON.stringify(users));
+  },
+
+  cleanUpExpiredUsers(): User[] {
+    const users = this.getMockedUsers();
+    const now = new Date();
+    const expirationTime = 24 * 60 * 60 * 1000; 
+
+    const validUsers = users.filter((user) => {
+      const createdAt = new Date(user.createdAt || now);
+      return now.getTime() - createdAt.getTime() <= expirationTime;
+    });
+
+    this.setMockedUsers(validUsers);
+    return validUsers;
+  },
+};
