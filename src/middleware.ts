@@ -1,7 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getCookie } from "./lib/utils";
 import { PROTECTED_ROUTES, PUBLIC_ROUTES } from "./lib/constants";
-import { cookies } from "next/headers";
 
 export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
@@ -17,8 +16,6 @@ export async function middleware(req: NextRequest) {
   const isPublicRoute = PUBLIC_ROUTES.includes(path);
 
   const token = await getCookie("authToken");
-//   const cookieStore = await cookies();
-//   const cookie = cookieStore.get("authToken")?.value;
 
   console.log("Middleware - Path:", path);
   console.log("Middleware - Is Protected Route:", isProtectedRoute);
