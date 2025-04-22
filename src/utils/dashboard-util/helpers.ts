@@ -1,4 +1,9 @@
-import { DashboardUser, RoleData } from "@/types/dashboard";
+import {
+  DashboardUser,
+  RoleData,
+  StatusData,
+  UserActivity,
+} from "@/types/dashboard";
 
 export const getNewUsers = (users: DashboardUser[]): number => {
   const twoDaysAgo = new Date();
@@ -40,4 +45,52 @@ export const getGreetingMessage = (
   return loggedInUser
     ? `${greeting}, ${loggedInUser.name}`
     : `${greeting}, User`;
+};
+
+export const getUserActivity = (users: DashboardUser[]): UserActivity[] => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  return months.map((month, index) => ({
+    month,
+    count: users.filter((user) => {
+      const createdAt = new Date(user.created_at || new Date().toISOString());
+      return createdAt.getMonth() === index;
+    }).length,
+  }));
+};
+
+export const getStatusData = (users: DashboardUser[]): StatusData[] => {
+  const statusCounts = users.reduce((acc, user) => {
+    const status = (user.status || "Active").toLowerCase();
+    acc[status] = (acc[status] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+  const totalStatusUsers = Object.values(statusCounts).reduce(
+    (sum, count) => sum + count,
+    0
+  );
+  return Object.keys(statusCounts).map((status) => ({
+    label: status.charAt(0).toUpperCase() + status.slice(1),
+    value: totalStatusUsers
+      ? Math.round((statusCounts[status] / totalStatusUsers) * 100)
+      : 0,
+    color:
+      status === "active"
+        ? "#4A90E2"
+        : status === "inactive"
+        ? "#FF6B6B"
+        : "#FFD93D",
+  }));
 };

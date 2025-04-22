@@ -120,12 +120,11 @@ import { useLastSeen } from "@/hooks/useLastSeen";
 import { DashboardUser } from "@/types/dashboard";
 import Loading from "../loading";
 import FilterBar from "@/components/filterBar";
-// import SummaryCards from "@/util/dashboard-util/summaryCards";
-// import ChartsAndTables from "@/util/dashboard-util/chartsAndTables";
 // import RecentActivity from "@/util/dashboard-util/recentActivities";
 import { AppDispatch } from "@/redux/store";
 import SummaryCards from "@/utils/dashboard-util/summaryCards";
 import { getNewUsers, getActiveUsers, getRoleDistribution, getGreetingMessage } from "@/utils/dashboard-util/helpers";
+import ChartsAndTables from "@/utils/dashboard-util/chartsAndTables";
 
 export default function Dashboard() {
   const dispatch = useDispatch<AppDispatch>();
@@ -171,7 +170,7 @@ export default function Dashboard() {
         newUsers={newUsers}
         activeUsers={activeUsers}
       />
-      {/* <ChartsAndTables roleData={roleData} users={filteredUsers} /> */}
+      <ChartsAndTables roleData={roleData} users={filteredUsers} />
       {/* <RecentActivity recentUsers={recentUsers} /> */}
     </div>
   );
