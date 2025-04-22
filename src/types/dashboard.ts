@@ -5,6 +5,8 @@ export interface DashboardUser {
   role: string;
   status: string;
   created_at: string;
+  email: string;
+  avatar: string;
 }
 
 export interface RoleData {
@@ -44,17 +46,32 @@ export interface SummaryCardsProps {
 
 // Types for ChartsAndTables
 export interface UserActivity {
-    month: string;
-    count: number;
-  }
-  
-  export interface StatusData {
-    label: string;
-    value: number;
-    color: string;
-  }
-  
-  export interface ChartsAndTablesProps {
-    roleData: RoleData;
-    users: DashboardUser[];
-  }
+  month: string;
+  count: number;
+}
+
+export interface StatusData {
+  label: string;
+  value: number;
+  color: string;
+}
+
+export interface ChartsAndTablesProps {
+  roleData: RoleData;
+  users: DashboardUser[];
+}
+
+// Types for RecentActivity
+export interface UserAction {
+  id: string;
+  actionType: "added" | "updated" | "deleted";
+  user: {
+    first_name: string;
+    last_name: string;
+  };
+  timestamp: string;
+}
+
+export interface RecentActivityProps {
+  recentUsers: DashboardUser[];
+}

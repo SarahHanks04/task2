@@ -81,6 +81,8 @@ export const fetchUsers = createAsyncThunk(
         id: user.id,
         first_name: user.first_name || "N/A",
         last_name: user.last_name || "N/A",
+        email: user.email || "N/A",
+        avatar: user.avatar || "/images/default-avatar.jpg",
         role: user.role || "General Back Office",
         status: user.status || "Active",
         created_at: user.createdAt || new Date().toISOString(),
