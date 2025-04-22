@@ -26,7 +26,7 @@ export interface AuthState {
   user: { name: string } | null;
 }
 
-// Types for SummaryCards
+// ypes for SummaryCards
 export interface SummaryCardConfig {
   title: string;
   value: number;
@@ -41,3 +41,20 @@ export interface SummaryCardsProps {
   newUsers: number;
   activeUsers: number;
 }
+
+// Types for ChartsAndTables
+export interface UserActivity {
+    month: string;
+    count: number;
+  }
+  
+  export interface StatusData {
+    label: string;
+    value: number;
+    color: string;
+  }
+  
+  export interface ChartsAndTablesProps {
+    roleData: RoleData;
+    users: DashboardUser[];
+  }
