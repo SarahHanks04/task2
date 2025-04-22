@@ -8,6 +8,7 @@ export interface User {
   role?: string;
   status?: string;
   createdAt?: string;
+  name?: string;
   [key: string]: any;
 }
 

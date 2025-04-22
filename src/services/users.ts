@@ -122,6 +122,21 @@ import { handleApiError } from "../utils/errorHandler";
 import { makeRequest } from "@/lib/api";
 import { ApiUserResponse, User, UserResponse } from "../lib/types";
 
+// export const getUsers = async (): Promise<User[]> => {
+//   try {
+//     const [page1, page2] = await Promise.all([
+//       makeRequest<{ data: User[] }>("get", "/users?page=1"),
+//       makeRequest<{ data: User[] }>("get", "/users?page=2"),
+//     ]);
+//     const reqresUsers = [...page1.data, ...page2.data];
+//     const localUsers = storage.getLocalUsers();
+//     return [...localUsers, ...reqresUsers];
+//   } catch (error) {
+//     handleApiError(error, "👥 Get Users");
+//     throw new Error("Failed to fetch users.");
+//   }
+// };
+
 export const getUsers = async (): Promise<User[]> => {
   try {
     const [page1, page2] = await Promise.all([
@@ -130,9 +145,10 @@ export const getUsers = async (): Promise<User[]> => {
     ]);
     const reqresUsers = [...page1.data, ...page2.data];
     const localUsers = storage.getLocalUsers();
-    return [...localUsers, ...reqresUsers];
+    const allUsers = [...localUsers, ...reqresUsers];
+    return allUsers;
   } catch (error) {
-    handleApiError(error, "👥 Get Users");
+    handleApiError(error, "👥 Get Users", "Failed to fetch users.");
     throw new Error("Failed to fetch users.");
   }
 };
