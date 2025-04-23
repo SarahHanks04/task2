@@ -1,103 +1,3 @@
-// "use client";
-
-// import { useSelector, useDispatch } from "react-redux";
-// import { useEffect, useState } from "react";
-// import { fetchUsers } from "@/redux/slices/userSlice";
-// import {
-//   selectUsers,
-//   selectUsersLoading,
-//   selectUsersError,
-//   selectLoggedInUser,
-// } from "@/redux/selectors/userSelectors";
-// // import {
-// //   getNewUsers,
-// //   getActiveUsers,
-// //   getRoleDistribution,
-// //   getGreetingMessage,
-// // } from "@/util/dashboard-util/helpers";
-// import { useLastSeen } from "@/hooks/useLastSeen";
-// // import SummaryCards from "@/util/dashboard-util/summaryCards";
-// // import ChartsAndTables from "@/util/dashboard-util/chartsAndTables";
-// // import RecentActivity from "@/util/dashboard-util/recentActivities";
-// import { DashboardUser } from "@/types/dashboard";
-// import Loading from "../loading";
-// import FilterBar from "@/components/filterBar";
-// import { getGreetingMessage } from "@/utils/dashboard-util/helpers";
-// import { AppDispatch } from "@/redux/store";
-
-// export default function Dashboard() {
-//   const dispatch = useDispatch<AppDispatch>();
-//   const users = useSelector(selectUsers);
-//   const loading = useSelector(selectUsersLoading);
-//   const error = useSelector(selectUsersError);
-//   const loggedInUser = useSelector(selectLoggedInUser);
-//   const lastSeen = useLastSeen();
-//   const [filteredUsers, setFilteredUsers] = useState<DashboardUser[]>(users);
-
-//   useEffect(() => {
-//     dispatch(fetchUsers());
-//   }, [dispatch]);
-
-//   useEffect(() => {
-//     setFilteredUsers(users); 
-//   }, [users]);
-
-//   // Metrics (use filteredUsers for consistency)
-// //   const totalUsers = filteredUsers.length;
-// //   const newUsers = getNewUsers(filteredUsers);
-// //   const activeUsers = getActiveUsers(filteredUsers);
-
-//   // Role distribution
-// //   const roleData = getRoleDistribution(filteredUsers);
-
-//   // Recent users
-// //   const recentUsers = filteredUsers.slice(0, 3);
-
-//   // Greetings
-//   const welcomeMessage = getGreetingMessage(loggedInUser);
-
-//   if (loading) return <Loading />;
-//   if (error)
-//     return <div className="text-red-500 text-center py-8">Error: {error}</div>;
-
-//   return (
-//     <div className="bg-gray-100 min-h-screen p-6">
-//       <Header welcomeMessage={welcomeMessage} lastSeen={lastSeen} />
-//       <FilterBar users={users} onFilter={setFilteredUsers} />
-//       {/* <SummaryCards
-//         totalUsers={totalUsers}
-//         newUsers={newUsers}
-//         activeUsers={activeUsers}
-//       /> */}
-//       {/* <ChartsAndTables roleData={roleData} users={filteredUsers} /> */}
-//       {/* <RecentActivity recentUsers={recentUsers} /> */} 
-//     </div>
-//   );
-// }
-
-// interface HeaderProps {
-//   welcomeMessage: string;
-//   lastSeen: Date | null;
-// }
-
-// const Header = ({ welcomeMessage, lastSeen }: HeaderProps) => (
-//   <div className="mb-6">
-//     <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-2 sm:gap-4">
-//       <h1 className="text-xl sm:text-2xl font-bold text-center sm:text-left text-[#11453B]">
-//         {welcomeMessage}
-//       </h1>
-//       <p className="text-xs sm:text-sm text-gray-500 text-center sm:text-right">
-//         {lastSeen
-//           ? `Last Seen: ${lastSeen.toLocaleString("en-US", {
-//               dateStyle: "medium",
-//               timeStyle: "short",
-//             })}`
-//           : "First Visit"}
-//       </p>
-//     </div>
-//   </div>
-// );
-
 "use client";
 
 import { useSelector } from "react-redux";
@@ -110,17 +10,10 @@ import {
   selectUsersError,
   selectLoggedInUser,
 } from "@/redux/selectors/userSelectors";
-// import {
-//   getNewUsers,
-//   getActiveUsers,
-//   getRoleDistribution,
-//   getGreetingMessage,
-// } from "@/util/dashboard-util/helpers";
 import { useLastSeen } from "@/hooks/useLastSeen";
 import { DashboardUser } from "@/types/dashboard";
 import Loading from "../loading";
 import FilterBar from "@/components/filterBar";
-// import RecentActivity from "@/util/dashboard-util/recentActivities";
 import { AppDispatch } from "@/redux/store";
 import SummaryCards from "@/utils/dashboard-util/summaryCards";
 import { getNewUsers, getActiveUsers, getRoleDistribution, getGreetingMessage } from "@/utils/dashboard-util/helpers";
@@ -144,7 +37,7 @@ export default function Dashboard() {
     setFilteredUsers(users);
   }, [users]);
 
-  // Metrics (use filteredUsers for consistency)
+  // Metrics 
   const totalUsers = filteredUsers.length;
   const newUsers = getNewUsers(filteredUsers);
   const activeUsers = getActiveUsers(filteredUsers);

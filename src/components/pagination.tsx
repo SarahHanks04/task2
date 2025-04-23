@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { PaginationProps } from "@/types/dashboard";
 
-// Reusable pagination button component
+// Pagination button component
 const PaginationButton = ({
   onClick,
   disabled,

@@ -6,7 +6,7 @@ import { SearchComponentProps } from "@/types/dashboard";
 import { filterUsers } from "@/utils/dashboard-util/helpers";
 import AddUserButton from "@/app/users/users-util/add-users-button";
 
-// Reusable search input component
+// Search input 
 const SearchInput = ({
   searchQuery,
   setSearchQuery,

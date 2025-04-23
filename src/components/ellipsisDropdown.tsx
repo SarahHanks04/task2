@@ -217,7 +217,7 @@ export default function EllipsisDropdown({
     );
   }, [user, users, setUsers, setFilteredUsers, dispatch]);
 
-  // Define menu actions dynamically
+  // Menu actions 
   const menuActions: MenuAction[] = useMemo(
     () => [
       {
