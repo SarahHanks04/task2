@@ -94,3 +94,18 @@ export const getStatusData = (users: DashboardUser[]): StatusData[] => {
         : "#FFD93D",
   }));
 };
+
+export const formatDate = (
+  dateString?: string,
+  format: "short" | "long" = "short"
+): string => {
+  if (!dateString || isNaN(new Date(dateString).getTime())) {
+    return "April 8, 2025";
+  }
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: format === "long" ? "long" : "short",
+    day: "numeric",
+  });
+};

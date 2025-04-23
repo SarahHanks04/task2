@@ -7,7 +7,7 @@ export interface User {
   avatar?: string;
   role?: string;
   status?: string;
-  createdAt?: string;
+  created_at?: string;
   name?: string;
   [key: string]: any;
 }

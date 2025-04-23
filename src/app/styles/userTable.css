@@ -1,0 +1,9 @@
+.editing-row {
+  @apply bg-yellow-50 border-l-4 border-yellow-500;
+}
+.table-btn {
+  @apply px-4 py-2 rounded;
+}
+.admin-btn {
+  @apply bg-[#11453B] text-white hover:bg-[#0d3a2f];
+}

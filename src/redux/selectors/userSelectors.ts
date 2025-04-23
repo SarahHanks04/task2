@@ -1,5 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
+// import { UserState, AuthState } from "@/types/dashboard";
 
 const selectUserState = (state: RootState) => state.users;
 const selectAuthState = (state: RootState) => state.auth;
@@ -17,6 +18,11 @@ export const selectUsersLoading = createSelector(
 export const selectUsersError = createSelector(
   [selectUserState],
   (userState) => userState.error
+);
+
+export const selectSelectedUser = createSelector(
+  [selectUserState],
+  (userState) => userState.selectedUser
 );
 
 export const selectLoggedInUser = createSelector(

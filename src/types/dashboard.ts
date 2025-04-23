@@ -20,6 +20,7 @@ export interface RoleData {
 
 export interface UserState {
   users: DashboardUser[];
+  selectedUser: DashboardUser | null;
   loading: boolean;
   error: string | null;
 }
@@ -28,7 +29,7 @@ export interface AuthState {
   user: { name: string } | null;
 }
 
-// ypes for SummaryCards
+// Types for SummaryCards
 export interface SummaryCardConfig {
   title: string;
   value: number;
@@ -66,12 +67,39 @@ export interface UserAction {
   id: string;
   actionType: "added" | "updated" | "deleted";
   user: {
+    id: string;
     first_name: string;
     last_name: string;
   };
   timestamp: string;
+  details?: Record<string, any>;
 }
 
 export interface RecentActivityProps {
   recentUsers: DashboardUser[];
+}
+
+export interface UserProps {
+  params: Promise<{ id: string }>;
+}
+
+// For SearchComponent, Pagination, EllipsisDropdown
+export interface SearchComponentProps {
+  users: DashboardUser[];
+  onFilteredUsers: (users: DashboardUser[]) => void;
+  onUserAdded: (user: DashboardUser) => void;
+}
+
+export interface PaginationProps {
+  totalItems: number;
+  itemsPerPage: number;
+  onPageChange: (page: number) => void;
+}
+
+export interface EllipsisDropdownProps {
+  user: DashboardUser;
+  onEdit: (user: DashboardUser) => void;
+  users: DashboardUser[];
+  setUsers: (users: DashboardUser[]) => void;
+  setFilteredUsers: (users: DashboardUser[]) => void;
 }
