@@ -22,7 +22,6 @@ import SearchComponent from "@/components/search";
 import Pagination from "@/components/pagination";
 import EllipsisDropdown from "@/components/ellipsisDropdown";
 
-
 // Reusable StatusBadge component
 function StatusBadge({ status }: { status: string }) {
   const normalizedStatus = (status || "Active").toLowerCase();
@@ -340,12 +339,12 @@ export default function Users() {
           ) : (
             <div>
               <EllipsisDropdown
-              user={user}
-              onEdit={onEditStart}
-              users={users}
-              setUsers={(updatedUsers) => dispatch(setUsers(updatedUsers))}
-              setFilteredUsers={setFilteredUsers}
-            />
+                user={user}
+                onEdit={onEditStart}
+                users={users}
+                setUsers={(updatedUsers) => dispatch(setUsers(updatedUsers))}
+                setFilteredUsers={setFilteredUsers}
+              />
             </div>
           ),
       },
@@ -373,20 +372,22 @@ export default function Users() {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <div className="btn-group-container mb-4">
-        <div className="btn-group flex space-x-2">
-          <button className="btn admin-btn px-4 py-2 bg-[#11453B] text-white rounded hover:bg-[#0d3a2f]">
+      <div className="btn-group-container mb-4 mt-4 w-full">
+        <div className="btn-group flex flex-col sm:flex-row gap-2 sm:gap-3">
+          <button
+            className="btn admin-btn px-4 py-2 bg-[#11453B] text-white rounded-md hover:bg-[#0d3a2f] focus:outline-none focus:ring-[#11453B] transition-colors w-full sm:w-auto text-center"
+            aria-current="page"
+          >
             ADMINISTRATION
           </button>
-          <button className="btn px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+          <button className="btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-gray-500 transition-colors w-full sm:w-auto text-center">
             GENERAL PARTNERS
           </button>
-          <button className="btn px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+          <button className="btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-gray-500 transition-colors w-full sm:w-auto text-center">
             WEALTH MANAGERS
           </button>
         </div>
       </div>
-
       <SearchComponent
         users={users}
         onFilteredUsers={setFilteredUsers}
@@ -395,7 +396,7 @@ export default function Users() {
 
       <div className="overflow-x-auto pt-4">
         <table className="min-w-full">
-          <thead className="bg-gray-50 text-sm">
+          <thead className="bg-gray-50 text-[13px]">
             <tr>
               <th className="px-6 py-3">
                 <input type="checkbox" className="rounded cursor-pointer" />

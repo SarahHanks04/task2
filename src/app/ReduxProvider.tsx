@@ -31,13 +31,12 @@ function ReduxInitializer({ children }: ReduxInitializerProps) {
       dispatch(
         loginSuccess({
           user: {
-            email: "sarah@gmail.com",
+            email: "",
             name: "User",
           },
           token,
         })
       );
-      console.log("Rehydrated state with token:", token);
     }
   }, [dispatch]);
 
