@@ -251,7 +251,7 @@ export const makeRequest = async <T>(
     });
     return response.data;
   } catch (error) {
-    throw error; // Let the caller handle the error
+    throw error; 
   }
 };
 

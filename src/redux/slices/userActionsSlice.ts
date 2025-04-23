@@ -94,7 +94,6 @@
 
 
 
-// src/redux/slices/userActionsSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserAction } from "@/types/dashboard";
 
@@ -118,7 +117,7 @@ const userActionsSlice = createSlice({
   reducers: {
     logUserAction: (state, action: PayloadAction<LogUserActionPayload>) => {
       const newAction: UserAction = {
-        id: Date.now().toString(), // Convert to string
+        id: Date.now().toString(), 
         actionType: action.payload.actionType as "added" | "updated" | "deleted",
         user: {
           id: action.payload.user.id,

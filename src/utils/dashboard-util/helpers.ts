@@ -109,3 +109,20 @@ export const formatDate = (
     day: "numeric",
   });
 };
+
+export const filterUsers = (
+  users: DashboardUser[],
+  query: string
+): DashboardUser[] => {
+  if (!query.trim()) return [...users];
+  const lowerCaseQuery = query.toLowerCase();
+  return users.filter(
+    (user) =>
+      user.first_name.toLowerCase().includes(lowerCaseQuery) ||
+      user.last_name.toLowerCase().includes(lowerCaseQuery) ||
+      user.email.toLowerCase().includes(lowerCaseQuery) ||
+      `${user.first_name} ${user.last_name}`
+        .toLowerCase()
+        .includes(lowerCaseQuery)
+  );
+};

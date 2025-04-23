@@ -18,9 +18,10 @@ import {
 import Loading from "@/app/loading";
 import toast from "react-hot-toast";
 import { formatDate } from "@/utils/dashboard-util/helpers";
-// import SearchComponent from "@/components/SearchComponent";
-// import Pagination from "@/components/Pagination";
-// import EllipsisDropdown from "@/components/EllipsisDropdown";
+import SearchComponent from "@/components/search";
+import Pagination from "@/components/pagination";
+import EllipsisDropdown from "@/components/ellipsisDropdown";
+
 
 // Reusable StatusBadge component
 function StatusBadge({ status }: { status: string }) {
@@ -219,7 +220,7 @@ export default function Users() {
               </div>
             </div>
           ) : (
-            <Link href={`/user/${user.id}`}>
+            <Link href={`/users/${user.id}`}>
               <div className="flex items-center">
                 <div className="flex-shrink-0 h-10 w-10">
                   <Image
@@ -338,13 +339,13 @@ export default function Users() {
             </div>
           ) : (
             <div>
-              {/* <EllipsisDropdown
+              <EllipsisDropdown
               user={user}
               onEdit={onEditStart}
               users={users}
               setUsers={(updatedUsers) => dispatch(setUsers(updatedUsers))}
               setFilteredUsers={setFilteredUsers}
-            /> */}
+            />
             </div>
           ),
       },
@@ -386,11 +387,11 @@ export default function Users() {
         </div>
       </div>
 
-      {/* <SearchComponent
+      <SearchComponent
         users={users}
         onFilteredUsers={setFilteredUsers}
         onUserAdded={handleUserAdded}
-      /> */}
+      />
 
       <div className="overflow-x-auto pt-4">
         <table className="min-w-full">
@@ -415,7 +416,7 @@ export default function Users() {
                 key={user.id}
                 className={
                   editingUserId === user.id
-                    ? "bg-yellow-50 border-l-4 border-yellow-500"
+                    ? "bg-[#fefce8] border-l-4 border-yellow-500"
                     : "hover:bg-gray-50"
                 }
               >
@@ -437,11 +438,11 @@ export default function Users() {
             ))}
           </tbody>
         </table>
-        {/* <Pagination
+        <Pagination
           totalItems={filteredUsers.length}
           itemsPerPage={itemsPerPage}
           onPageChange={setCurrentPage}
-        /> */}
+        />
       </div>
     </div>
   );

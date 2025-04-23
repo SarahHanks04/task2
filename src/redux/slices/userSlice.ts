@@ -176,7 +176,6 @@
 // export default userSlice.reducer;
 
 
-// src/redux/slices/userSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { getUsers, getUserById } from "@/services/users";
 import { DashboardUser, UserState } from "@/types/dashboard";
@@ -193,7 +192,7 @@ export const fetchUsers = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const users = await getUsers();
-      return users; // Already DashboardUser[]
+      return users; 
     } catch (error) {
       return rejectWithValue(
         error instanceof Error ? error.message : "An unknown error occurred"
@@ -207,7 +206,7 @@ export const fetchUserById = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const user = await getUserById(id);
-      return user; // Already DashboardUser
+      return user; 
     } catch (error) {
       return rejectWithValue(
         error instanceof Error ? error.message : "An unknown error occurred"

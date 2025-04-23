@@ -1,5 +1,56 @@
 .editing-row {
-  @apply bg-yellow-50 border-l-4 border-yellow-500;
+  @apply bg-[#fefce8] border-l-4 border-yellow-500;
+}
+.table-btn {
+  @apply px-4 py-2 rounded;
+}
+.admin-btn {
+  @apply bg-[#11453B] text-white hover:bg-[#0d3a2f];
+}
+.modal-btn {
+  @apply px-4 py-2 rounded-md transition-colors;
+}
+.modal-primary {
+  @apply bg-[#11453B] text-white hover:bg-[#0d3b33];
+}
+.modal-secondary {
+  @apply bg-gray-300 text-gray-700 hover:bg-gray-400;
+}
+.form-input {
+  @apply w-full p-2 rounded-md bg-white text-[#11453B] border border-[#11453B]/30 focus:outline-none focus:ring-1 focus:ring-[#11453B]/50;
+}
+.pagination-container {
+  @apply flex items-center justify-between mt-4 px-4 py-3 bg-white border-t border-gray-200;
+}
+.pagination-info {
+  @apply text-sm text-gray-700;
+}
+.pagination-btn {
+  @apply p-2 rounded-md bg-[#F0F7EB80] text-[#11453B] hover:bg-[#11453B] hover:text-white;
+}
+.pagination-disabled {
+  @apply bg-gray-100 text-gray-400 cursor-not-allowed;
+}
+.pagination-active {
+  @apply bg-[#11453B] text-white;
+}
+.pagination-ellipsis {
+  @apply flex items-center text-gray-500 px-2;
+}
+.modal-btn {
+  @apply px-4 py-2 rounded-md transition-colors;
+}
+.modal-primary {
+  @apply bg-[#11453B] text-white hover:bg-[#0d3b33];
+}
+.modal-secondary {
+  @apply bg-gray-300 text-gray-700 hover:bg-gray-400;
+}
+.form-input {
+  @apply w-full p-2 rounded-md bg-white text-[#11453B] border border-[#11453B]/30 focus:outline-none focus:ring-1 focus:ring-[#11453B]/50;
+}
+.search-input {
+  @apply pl-10 pr-10 py-2 border rounded w-full focus:outline-none;
 }
 .table-btn {
   @apply px-4 py-2 rounded;
