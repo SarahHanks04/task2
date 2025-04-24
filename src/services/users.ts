@@ -78,10 +78,18 @@ export const getUsers = async (
     const total = allUsers.length;
     const total_pages = Math.ceil(total / per_page);
 
+    // return {
+    //   users: paginatedUsers,
+    //   total,
+    //   total_pages,
+    // };
+    
+    // Deduplicate the users for the current page
+    const deduplicatedUsers = deduplicateUsers(localUsers, apiUsers);
     return {
-      users: paginatedUsers,
-      total,
-      total_pages,
+      users: deduplicatedUsers,
+      total: response.total, // Use the API's total (e.g., 12)
+      total_pages: response.total_pages, // Use the API's total_pages (e.g., 2)
     };
   } catch (error) {
     handleApiError(error, "Get Users", "Failed to fetch users.");
