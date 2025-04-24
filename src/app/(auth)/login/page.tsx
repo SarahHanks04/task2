@@ -46,8 +46,14 @@ export default function Login() {
         })
       );
       router.push("/");
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
+    } catch (err: unknown) {
+      // Fix: Use 'unknown' instead of 'Error'
+      // Type guard to safely access err.message
+      if (err instanceof Error) {
+        setError(err.message || "An unexpected error occurred");
+      } else {
+        setError("An unexpected error occurred");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -128,7 +134,7 @@ export default function Login() {
         {error && <div className="mt-4 text-red-500 text-center">{error}</div>}
 
         <p className="mt-5 text-center text-black">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <a href="/register" className="text-[#11453B] hover:underline">
             Register
           </a>
