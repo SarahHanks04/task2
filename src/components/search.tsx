@@ -20,7 +20,7 @@ const SearchInput = ({
     <input
       type="text"
       placeholder="Search Users"
-      className="pl-10 pr-10 py-2 border rounded w-full focus:outline-none"
+      className="pl-10 pr-10 text-gray-400 py-2 border rounded w-full focus:outline-none"
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
     />
