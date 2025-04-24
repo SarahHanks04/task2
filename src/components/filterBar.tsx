@@ -49,7 +49,7 @@ export default function FilterBar({ users, onFilter }: FilterBarProps) {
             onChange={(e: ChangeEvent<HTMLSelectElement>) =>
               setRole(e.target.value)
             }
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#11453B] focus:border-[#11453B] text-sm"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#11453B] focus:border-[#11453B] text-sm text-gray-500"
             aria-label="Filter by role"
           >
             <option value="" className="text-gray-500">All Roles</option>
