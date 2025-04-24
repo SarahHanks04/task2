@@ -9,7 +9,6 @@ export interface User {
   status?: string;
   created_at?: string;
   name?: string;
-  [key: string]: any;
 }
 
 export interface LoginResponse {
@@ -36,7 +35,7 @@ export interface UserResponse {
 export interface ErrorDetails {
   message: string;
   status?: number;
-  data?: any;
+  data?: unknown;
 }
 
 export interface ApiUserResponse {

@@ -2,6 +2,7 @@ import { handleApiError } from "../utils/errorHandler";
 import { makeRequest } from "@/lib/api";
 import { MockUserService } from "./mockUserServices";
 import { LoginResponse, RegisterResponse } from "../lib/types";
+import { AxiosError } from "axios";
 
 export const loginUser = async (
   email: string,
@@ -16,18 +17,21 @@ export const loginUser = async (
         password,
       }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     const user = MockUserService.findUser(email, password);
     if (user) {
       return { token: MockUserService.generateToken(), name: user.name };
     }
 
-    const errorMessage =
-      error?.response?.data?.error === "user not found"
-        ? "User not found. Please register first."
-        : "Login failed. Please check your credentials.";
+    let errorMessage = "Login failed. Please check your credentials.";
+    if (error instanceof AxiosError) {
+      errorMessage =
+        error.response?.data?.error === "user not found"
+          ? "User not found. Please register first."
+          : errorMessage;
+    }
 
-    handleApiError(error, "🔐 Login");
+    handleApiError(error as AxiosError | Error, "🔐 Login");
     throw new Error(errorMessage);
   }
 };
@@ -41,8 +45,12 @@ export const registerUser = async (
       email,
       password,
     });
-  } catch (error: any) {
-    const err = error.response?.data?.error;
+  } catch (error: unknown) {
+    let err: string | undefined;
+    if (error instanceof AxiosError) {
+      err = error.response?.data?.error;
+    }
+
     if (err === "Note: Only defined users succeed registration") {
       const newUser = MockUserService.addUser(email, password);
       return {
@@ -58,7 +66,7 @@ export const registerUser = async (
         ? "Email is required."
         : "Registration failed. Please try again.";
 
-    handleApiError(error, "🔐 Registration");
+    handleApiError(error as AxiosError | Error, "🔐 Registration");
     throw new Error(errorMessage);
   }
 };

@@ -3,8 +3,19 @@ import { DashboardUser } from "@/types/dashboard";
 import { handleApiError } from "@/utils/errorHandler";
 import { storage } from "@/utils/storage";
 
+interface RawUser {
+  id: string | number;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  avatar?: string;
+  role?: string;
+  status?: string;
+  created_at?: string;
+}
+
 // Normalize user data
-const normalizeUser = (user: any): DashboardUser => ({
+const normalizeUser = (user: RawUser): DashboardUser => ({
   id: user.id.toString(),
   first_name: user.first_name || "N/A",
   last_name: user.last_name || "N/A",
@@ -17,7 +28,7 @@ const normalizeUser = (user: any): DashboardUser => ({
 
 const deduplicateUsers = (
   localUsers: DashboardUser[],
-  apiUsers: any[]
+  apiUsers: RawUser[]
 ): DashboardUser[] => {
   const userMap = new Map<string, DashboardUser>();
 
@@ -47,7 +58,7 @@ export const getUsers = async (
   try {
     // Fetch users
     const response = await makeRequest<{
-      data: any[];
+      data: RawUser[];
       total: number;
       total_pages: number;
       page: number;
@@ -86,7 +97,10 @@ export const getUserById = async (id: string): Promise<DashboardUser> => {
       return normalizeUser(localUser);
     }
 
-    const response = await makeRequest<{ data: any }>("get", `/users/${id}`);
+    const response = await makeRequest<{ data: RawUser }>(
+      "get",
+      `/users/${id}`
+    );
     return normalizeUser(response.data);
   } catch (error) {
     handleApiError(error, "Get User", "Failed to fetch user details.");
@@ -98,7 +112,7 @@ export const createUser = async (
   userData: Partial<DashboardUser>
 ): Promise<DashboardUser> => {
   try {
-    const response = await makeRequest<any>("post", "/users", userData);
+    const response = await makeRequest<RawUser>("post", "/users", userData);
     const newUser = normalizeUser({ ...response, ...userData });
     const localUsers = storage.getLocalUsers();
     const updatedLocalUsers = localUsers.filter(
@@ -118,7 +132,11 @@ export const updateUser = async (
   userData: Partial<DashboardUser>
 ): Promise<DashboardUser> => {
   try {
-    const response = await makeRequest<any>("put", `/users/${id}`, userData);
+    const response = await makeRequest<RawUser>(
+      "put",
+      `/users/${id}`,
+      userData
+    );
     const updatedUser = normalizeUser({ ...response, ...userData });
     const localUsers = storage.getLocalUsers();
     const updatedLocalUsers = localUsers.map((user) =>

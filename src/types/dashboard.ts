@@ -74,7 +74,7 @@ export interface UserAction {
     last_name: string;
   };
   timestamp: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 export interface RecentActivityProps {

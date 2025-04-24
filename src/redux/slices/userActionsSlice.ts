@@ -8,7 +8,7 @@ interface UserActionsState {
 interface LogUserActionPayload {
   actionType: string;
   user: { id: string; first_name: string; last_name: string };
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 const initialState: UserActionsState = {

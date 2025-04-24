@@ -160,7 +160,9 @@ export default function AddUserModal({
       setImagePreview(null);
       onClose();
     } catch (error) {
-      toast.error("Failed to add user", {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to add user";
+      toast.error(errorMessage, {
         position: "top-right",
         duration: 4000,
         style: { background: "#ef4444", color: "#fff" },

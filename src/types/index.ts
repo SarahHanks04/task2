@@ -17,13 +17,13 @@ export interface AuthState {
   isAuthenticated: boolean;
 }
 
-export interface UserAction {
-  id: number;
-  actionType: string;
-  user: Pick<User, "id" | "first_name" | "last_name">;
-  timestamp: string;
-  details?: Record<string, any>;
-}
+// export interface UserAction {
+//   id: number;
+//   actionType: string;
+//   user: Pick<User, "id" | "first_name" | "last_name">;
+//   timestamp: string;
+//   details?: Record<string, unknown>;
+// }
 
 export interface UsersState {
   users: User[];

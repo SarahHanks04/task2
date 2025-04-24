@@ -14,7 +14,7 @@ import {
 } from "@/redux/slices/userSlice";
 import { logUserAction } from "@/redux/slices/userActionsSlice";
 import { updateUser } from "@/services/users";
-import { RootState, AppDispatch } from "@/redux/store";
+import { AppDispatch } from "@/redux/store";
 import { DashboardUser } from "@/types/dashboard";
 import Loading from "@/app/loading";
 import toast from "react-hot-toast";
@@ -387,6 +387,8 @@ export default function Users() {
       handleSubmit,
       onEditCancel,
       onEditStart,
+      dispatch, 
+      onEditSave,
     ]
   );
 

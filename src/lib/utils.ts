@@ -1,5 +1,6 @@
-"use server"
+"use server";
 
+import { AxiosError } from "axios";
 import { cookies } from "next/headers";
 
 export const getCookie = async (name: string): Promise<string | null> => {
@@ -19,10 +20,16 @@ export const deleteCookie = (name: string): void => {
   document.cookie = `${name}=; path=/; max-age=0`;
 };
 
-export const handleApiError = (error: any): string => {
-  return (
-    error.response?.data?.error ||
-    error.message ||
-    "An unexpected error occurred."
-  );
+export const handleApiError = (error: unknown): string => {
+  if (error instanceof AxiosError) {
+    return (
+      error.response?.data?.error ||
+      error.message ||
+      "An unexpected error occurred."
+    );
+  }
+  if (error instanceof Error) {
+    return error.message || "An unexpected error occurred.";
+  }
+  return "An unexpected error occurred.";
 };

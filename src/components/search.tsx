@@ -72,7 +72,8 @@ export default function SearchComponent({
       </div>
       {hasNoResults && (
         <div className="text-center py-4 text-gray-500">
-          No users found matching "{searchQuery}".
+          {/* No users found matching "{searchQuery}". */}
+          {`No users found matching "${searchQuery}".`}
         </div>
       )}
     </div>

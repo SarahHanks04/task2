@@ -6,7 +6,6 @@ export const handleApiError = (
   context: string,
   customMessage?: string
 ): never => {
-  const isBrowser = typeof window !== "undefined";
   let errorDetails: ErrorDetails = {
     message: customMessage || "An unexpected error occurred",
   };
@@ -21,13 +20,11 @@ export const handleApiError = (
     errorDetails.message = error.message;
   }
 
-  isBrowser
-    ? console.error(`${context} (client):`, errorDetails)
-    : console.error(`${context} (server):`, {
-        message: errorDetails.message,
-        status: errorDetails.status,
-        stack: error instanceof Error ? error.stack : undefined,
-      });
+  console.error(`${context}:`, {
+    message: errorDetails.message,
+    status: errorDetails.status,
+    stack: error instanceof Error ? error.stack : undefined,
+  });
 
   throw new Error(errorDetails.message);
 };
