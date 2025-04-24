@@ -17,10 +17,10 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export const makeRequest = async <T>(
+export const makeRequest = async <T, D = unknown>(
   method: "get" | "post" | "put" | "delete",
   url: string,
-  data?: unknown
+  data?: D
 ): Promise<T> => {
   try {
     const response: AxiosResponse<T> = await api({
