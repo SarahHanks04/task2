@@ -13,7 +13,7 @@ import {
   CalendarDays,
 } from "lucide-react";
 import {
-  selectSelectedUser,
+  selectLoggedInUser,
   selectUsersLoading,
   selectUsersError,
 } from "@/redux/selectors/userSelectors";
@@ -41,7 +41,7 @@ interface DetailConfig {
 
 export default function User({ params }: UserProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const selectedUser = useSelector(selectSelectedUser);
+  const selectedUser = useSelector(selectLoggedInUser);
   const loading = useSelector(selectUsersLoading);
   const error = useSelector(selectUsersError);
 

@@ -27,7 +27,7 @@ export default function FilterBar({ users, onFilter }: FilterBarProps) {
     onFilter(users);
   };
 
-  // Get unique roles from users
+  // Unique roles
   const uniqueRoles = [...new Set(users.map((user) => user.role))].filter(
     Boolean
   );

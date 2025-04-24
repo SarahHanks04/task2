@@ -160,7 +160,7 @@ const Sidebar = () => {
         </nav>
       </aside>
 
-      {/* Overlay for Mobile Menu */}
+      {/* Overlay */}
       {isMobile && isMobileMenuOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"

@@ -17,18 +17,11 @@ export async function middleware(req: NextRequest) {
 
   const token = await getCookie("authToken");
 
-  console.log("Middleware - Path:", path);
-  console.log("Middleware - Is Protected Route:", isProtectedRoute);
-  console.log("Middleware - Is Public Route:", isPublicRoute);
-  console.log("Middleware - Token in Cookie:", token);
-
   if (isProtectedRoute && !token) {
-    console.log("No token found, redirecting to /login");
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
   if (isPublicRoute && token) {
-    console.log("Token found, redirecting to /dashboard");
     return NextResponse.redirect(new URL("/", req.nextUrl));
   }
 

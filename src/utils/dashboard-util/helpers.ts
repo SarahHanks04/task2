@@ -37,13 +37,13 @@ export const getRoleDistribution = (users: DashboardUser[]): RoleData => {
 };
 
 export const getGreetingMessage = (
-  loggedInUser: { name: string } | null
+  loggedInUser: { first_name: string } | null
 ): string => {
   const hour = new Date().getHours();
   const greeting =
     hour < 12 ? "Good Morning" : hour < 17 ? "Good Afternoon" : "Good Evening";
   return loggedInUser
-    ? `${greeting}, ${loggedInUser.name}`
+    ? `${greeting}, ${loggedInUser.first_name}`
     : `${greeting}, User`;
 };
 

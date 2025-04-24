@@ -23,6 +23,8 @@ export interface UserState {
   selectedUser: DashboardUser | null;
   loading: boolean;
   error: string | null;
+  totalUsers: number;
+  totalPages: number;
 }
 
 export interface AuthState {

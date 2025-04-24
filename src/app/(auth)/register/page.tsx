@@ -4,13 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
 import { registerUser } from "@/services/auth";
 import { RegisterFormValues, FormField } from "@/types/register";
 
 export default function Register() {
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");

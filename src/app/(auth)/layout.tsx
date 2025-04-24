@@ -12,7 +12,6 @@ import { RootState } from "@/redux/store";
 export default function AuthenticatedLayout({
   children,
 }: AuthenticatedLayoutProps) {
-//   const { isAuthenticated } = useSelector((state: AuthState) => state);
 const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const pathname = usePathname();
 

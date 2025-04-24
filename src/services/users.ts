@@ -3,7 +3,7 @@ import { DashboardUser } from "@/types/dashboard";
 import { handleApiError } from "@/utils/errorHandler";
 import { storage } from "@/utils/storage";
 
-// Normalize user data to DashboardUser
+// Normalize user data
 const normalizeUser = (user: any): DashboardUser => ({
   id: user.id.toString(),
   first_name: user.first_name || "N/A",
@@ -15,18 +15,65 @@ const normalizeUser = (user: any): DashboardUser => ({
   created_at: user.created_at || new Date().toISOString(),
 });
 
-export const getUsers = async (): Promise<DashboardUser[]> => {
+const deduplicateUsers = (
+  localUsers: DashboardUser[],
+  apiUsers: any[]
+): DashboardUser[] => {
+  const userMap = new Map<string, DashboardUser>();
+
+  localUsers.forEach((user) => userMap.set(user.id, normalizeUser(user)));
+
+  // Add API users
+  apiUsers.forEach((user) => {
+    if (!userMap.has(user.id.toString())) {
+      userMap.set(user.id.toString(), normalizeUser(user));
+    }
+  });
+
+  return Array.from(userMap.values());
+};
+
+// Interface for paginated response
+interface PaginatedUsers {
+  users: DashboardUser[];
+  total: number;
+  total_pages: number;
+}
+
+export const getUsers = async (
+  page: number = 1,
+  per_page: number = 6
+): Promise<PaginatedUsers> => {
   try {
-    const [page1, page2] = await Promise.all([
-      makeRequest<{ data: any[] }>("get", "/users?page=1"),
-      makeRequest<{ data: any[] }>("get", "/users?page=2"),
-    ]);
-    const reqresUsers = [...page1.data, ...page2.data];
+    // Fetch users
+    const response = await makeRequest<{
+      data: any[];
+      total: number;
+      total_pages: number;
+      page: number;
+      per_page: number;
+    }>("get", `/users?page=${page}&per_page=${per_page}`);
+
+    const apiUsers = response.data;
     const localUsers = storage.getLocalUsers();
-    const allUsers = [...localUsers, ...reqresUsers].map(normalizeUser);
-    return allUsers;
+
+    const allUsers = deduplicateUsers(localUsers, apiUsers);
+
+    // Calculate pagination
+    const startIndex = (page - 1) * per_page;
+    const paginatedUsers = allUsers.slice(startIndex, startIndex + per_page);
+
+    // Total users
+    const total = allUsers.length;
+    const total_pages = Math.ceil(total / per_page);
+
+    return {
+      users: paginatedUsers,
+      total,
+      total_pages,
+    };
   } catch (error) {
-    handleApiError(error, "👥 Get Users", "Failed to fetch users.");
+    handleApiError(error, "Get Users", "Failed to fetch users.");
     throw new Error("Failed to fetch users.");
   }
 };
@@ -42,17 +89,26 @@ export const getUserById = async (id: string): Promise<DashboardUser> => {
     const response = await makeRequest<{ data: any }>("get", `/users/${id}`);
     return normalizeUser(response.data);
   } catch (error) {
-    handleApiError(error, "👤 Get User", "Failed to fetch user details.");
+    handleApiError(error, "Get User", "Failed to fetch user details.");
     throw new Error("Failed to fetch user details.");
   }
 };
 
-export const createUser = async (userData: Partial<DashboardUser>): Promise<DashboardUser> => {
+export const createUser = async (
+  userData: Partial<DashboardUser>
+): Promise<DashboardUser> => {
   try {
     const response = await makeRequest<any>("post", "/users", userData);
-    return normalizeUser(response);
+    const newUser = normalizeUser({ ...response, ...userData });
+    const localUsers = storage.getLocalUsers();
+    const updatedLocalUsers = localUsers.filter(
+      (user) => user.id !== newUser.id
+    );
+    updatedLocalUsers.push(newUser);
+    storage.setLocalUsers(updatedLocalUsers);
+    return newUser;
   } catch (error) {
-    handleApiError(error, "➕ Create User", "Failed to create user.");
+    handleApiError(error, "Create User", "Failed to create user.");
     throw new Error("Failed to create user.");
   }
 };
@@ -65,14 +121,13 @@ export const updateUser = async (
     const response = await makeRequest<any>("put", `/users/${id}`, userData);
     const updatedUser = normalizeUser({ ...response, ...userData });
     const localUsers = storage.getLocalUsers();
-    const index = localUsers.findIndex((user) => user.id === id);
-    if (index !== -1) {
-      localUsers[index] = updatedUser;
-      storage.setLocalUsers(localUsers);
-    }
+    const updatedLocalUsers = localUsers.map((user) =>
+      user.id === id ? updatedUser : user
+    );
+    storage.setLocalUsers(updatedLocalUsers);
     return updatedUser;
   } catch (error) {
-    handleApiError(error, "✏️ Update User", "Failed to update user.");
+    handleApiError(error, "Update User", "Failed to update user.");
     throw new Error("Failed to update user.");
   }
 };
@@ -85,7 +140,7 @@ export const deleteUser = async (id: string): Promise<boolean> => {
     storage.setLocalUsers(updated);
     return true;
   } catch (error) {
-    handleApiError(error, "🗑️ Delete User", "Failed to delete user.");
+    handleApiError(error, "Delete User", "Failed to delete user.");
     throw new Error("Failed to delete user.");
   }
 };

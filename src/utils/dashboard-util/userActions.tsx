@@ -21,7 +21,6 @@ export const logUserAction = (
     ...(meta || {}),
   };
   console.log("User Action:", log);
-  // Add to localStorage or API logging if needed
   const logs = JSON.parse(localStorage.getItem("userActions") || "[]");
   logs.push(log);
   localStorage.setItem("userActions", JSON.stringify(logs));

@@ -3,12 +3,13 @@
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { fetchUsers } from "@/redux/slices/userSlice";
+import { setLoading, setUsers, setError } from "@/redux/slices/userSlice";
 import {
   selectUsers,
   selectUsersLoading,
   selectUsersError,
   selectLoggedInUser,
+  selectTotalUsers,
 } from "@/redux/selectors/userSelectors";
 import { useLastSeen } from "@/hooks/useLastSeen";
 import { DashboardUser } from "@/types/dashboard";
@@ -16,9 +17,15 @@ import Loading from "../loading";
 import FilterBar from "@/components/filterBar";
 import { AppDispatch } from "@/redux/store";
 import SummaryCards from "@/utils/dashboard-util/summaryCards";
-import { getNewUsers, getActiveUsers, getRoleDistribution, getGreetingMessage } from "@/utils/dashboard-util/helpers";
+import {
+  getNewUsers,
+  getActiveUsers,
+  getRoleDistribution,
+  getGreetingMessage,
+} from "@/utils/dashboard-util/helpers";
 import ChartsAndTables from "@/utils/dashboard-util/chartsAndTables";
 import RecentActivity from "@/utils/dashboard-util/recentActivities";
+import { getUsers } from "@/services/users";
 
 export default function Dashboard() {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,19 +33,35 @@ export default function Dashboard() {
   const loading = useSelector(selectUsersLoading);
   const error = useSelector(selectUsersError);
   const loggedInUser = useSelector(selectLoggedInUser);
+  const totalUsers = useSelector(selectTotalUsers);
   const lastSeen = useLastSeen();
   const [filteredUsers, setFilteredUsers] = useState<DashboardUser[]>(users);
 
   useEffect(() => {
-    dispatch(fetchUsers());
+    const fetchAllUsers = async () => {
+      dispatch(setLoading());
+      try {
+        const {
+          users: fetchedUsers,
+          total,
+          total_pages,
+        } = await getUsers(1, 100);
+        dispatch(setUsers({ users: fetchedUsers, total, total_pages }));
+        setFilteredUsers(fetchedUsers);
+      } catch (err) {
+        dispatch(
+          setError(err instanceof Error ? err.message : "Failed to fetch users")
+        );
+      }
+    };
+    fetchAllUsers();
   }, [dispatch]);
 
   useEffect(() => {
     setFilteredUsers(users);
   }, [users]);
 
-  // Metrics 
-  const totalUsers = filteredUsers.length;
+  // Metrics
   const newUsers = getNewUsers(filteredUsers);
   const activeUsers = getActiveUsers(filteredUsers);
 

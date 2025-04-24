@@ -1,4 +1,3 @@
-// src/components/EllipsisDropdown.tsx
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
@@ -17,10 +16,7 @@ import { useDispatch } from "react-redux";
 import { deleteUser } from "@/services/users";
 import { logUserAction } from "@/redux/slices/userActionsSlice";
 import { EllipsisDropdownProps } from "@/types/dashboard";
-// import { updateLocalStorage } from "@/util/storage";
-// import "@/styles/userTable.css";
 import { formatDate } from "@/utils/dashboard-util/helpers";
-import { storage } from "@/utils/storage";
 
 // Menu action type
 interface MenuAction {
@@ -32,7 +28,7 @@ interface MenuAction {
   href?: string;
 }
 
-// Reusable menu item component
+// Menu item component
 const MenuItem = ({
   label,
   icon: Icon,
@@ -61,7 +57,7 @@ const MenuItem = ({
   );
 };
 
-// Reusable confirmation toast component
+// Confirmation toast component
 const ConfirmationToast = ({
   user,
   onConfirm,
@@ -122,7 +118,7 @@ export default function EllipsisDropdown({
     setIsOpen((prev) => !prev);
   }, []);
 
-  // Close dropdown on outside click
+  // Close dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -142,7 +138,7 @@ export default function EllipsisDropdown({
     setIsOpen(false);
   }, [onEdit, user]);
 
-  // Handle export to PDF
+  // Handle export
   const handleExport = useCallback(() => {
     const doc = new jsPDF();
     doc.setFontSize(12);
@@ -159,7 +155,7 @@ export default function EllipsisDropdown({
     setIsOpen(false);
   }, [user]);
 
-  // Handle delete with confirmation
+  // Handle delete
   const handleDelete = useCallback(() => {
     toast.custom(
       (t) => (
@@ -172,8 +168,6 @@ export default function EllipsisDropdown({
               const updatedUsers = users.filter((u) => u.id !== user.id);
               setUsers(updatedUsers);
               setFilteredUsers(updatedUsers);
-            
-            storage.setLocalUsers(updatedUsers);
               dispatch(
                 logUserAction({
                   actionType: "deleted",
@@ -217,7 +211,7 @@ export default function EllipsisDropdown({
     );
   }, [user, users, setUsers, setFilteredUsers, dispatch]);
 
-  // Menu actions 
+  // Menu actions
   const menuActions: MenuAction[] = useMemo(
     () => [
       {
@@ -241,7 +235,8 @@ export default function EllipsisDropdown({
         label: "Delete user",
         icon: Trash2,
         onClick: handleDelete,
-        className: "dropdown-item-danger border-t border-gray-200 text-red-600 hover:bg-red-50",
+        className:
+          "dropdown-item-danger border-t border-gray-200 text-red-600 hover:bg-red-50",
       },
     ],
     [user.id, handleEdit, handleExport, handleDelete]

@@ -1,37 +1,9 @@
-// import { v4 as uuidv4 } from "uuid";
-// import { storage } from "../utils/storage";
-// import { User } from "../lib/types";
-
-// export const MockUserService = {
-//   findUser(email: string, password: string): User | undefined {
-//     const users = storage.cleanUpExpiredUsers();
-//     return users.find((u) => u.email === email && u.password === password);
-//   },
-
-//   addUser(email: string, password: string, name?: string): User {
-//     const newUser: User = {
-//       id: Math.floor(Math.random() * 1000).toString(),
-//       email,
-//       password,
-//       name,
-//       createdAt: new Date().toISOString(),
-//     };
-//     const users = storage.getMockedUsers();
-//     users.push(newUser);
-//     storage.setMockedUsers(users);
-//     return newUser;
-//   },
-
-//   generateToken(): string {
-//     return `mock-token-${uuidv4()}`;
-//   },
-// };
 import { v4 as uuidv4 } from "uuid";
 import { storage } from "../utils/storage";
 import { User } from "../lib/types";
 import { DashboardUser } from "@/types/dashboard";
 
-// Mock authentication store for email and password
+// Mock authentication
 interface MockAuthUser {
   email: string;
   password: string;
@@ -55,17 +27,17 @@ export const MockUserService = {
     );
     if (!authUser) return undefined;
 
-    // Find corresponding DashboardUser in mockedUsers
-    const users = storage.cleanUpExpiredUsers(); // Returns DashboardUser[]
+    // Find DashboardUser in mockedUsers
+    const users = storage.cleanUpExpiredUsers(); 
     const dashboardUser = users.find((u) => u.email === authUser.email);
 
     if (!dashboardUser) return undefined;
 
-    // Construct User object for compatibility
+    // User object 
     return {
       id: dashboardUser.id,
       email: dashboardUser.email,
-      password, // Return the provided password (not stored in DashboardUser)
+      password, 
       first_name: dashboardUser.first_name,
       last_name: dashboardUser.last_name,
       avatar: dashboardUser.avatar,
@@ -79,11 +51,10 @@ export const MockUserService = {
   addUser(email: string, password: string, name?: string): User {
     const id = Math.floor(Math.random() * 1000).toString();
     
-    // Split name into first_name and last_name if provided
     const [first_name, ...last_name_parts] = name ? name.split(" ") : ["User", ""];
     const last_name = last_name_parts.join(" ") || "Unknown";
 
-    // Create DashboardUser for storage
+    // DashboardUser for storage
     const newDashboardUser: DashboardUser = {
       id,
       email,
@@ -95,17 +66,15 @@ export const MockUserService = {
       avatar: "/images/default-avatar.jpg",
     };
 
-    // Update mockedUsers
     const users = storage.getMockedUsers();
     users.push(newDashboardUser);
     storage.setMockedUsers(users);
 
-    // Store email and password in mock auth store
     const authUsers = getMockAuthUsers();
     authUsers.push({ email, password });
     setMockAuthUsers(authUsers);
 
-    // Return User object for compatibility
+    // Return User object
     return {
       id,
       email,

@@ -19,7 +19,6 @@ import { containerVariants } from "../animations";
 import { lineChartOptions, pieChartOptions } from "../chartConfigs";
 import { getStatusData, getUserActivity } from "./helpers";
 import { useMemo } from "react";
-// import "chartsAndTables.module.css";
 
 ChartJS.register(
   ArcElement,
@@ -35,7 +34,6 @@ export default function ChartsAndTables({
   roleData,
   users,
 }: ChartsAndTablesProps) {
-  // Calculate user activity and status data
   const userActivity = useMemo(() => getUserActivity(users), [users]);
   const statusData = useMemo(() => getStatusData(users), [users]);
 

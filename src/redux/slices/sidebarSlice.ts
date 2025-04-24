@@ -29,8 +29,10 @@ const sidebarSlice = createSlice({
   },
 });
 
-export const { toggleCollapse, setCollapse, toggleMobileMenu, setMobileMenu } = sidebarSlice.actions;
+export const { toggleCollapse, setCollapse, toggleMobileMenu, setMobileMenu } =
+  sidebarSlice.actions;
 export default sidebarSlice.reducer;
-// redux/slices/sidebarSlice.ts (add to the end)
-export const selectIsCollapsed = (state: { sidebar: SidebarState }) => state.sidebar.isCollapsed;
-export const selectIsMobileMenuOpen = (state: { sidebar: SidebarState }) => state.sidebar.isMobileMenuOpen;
+export const selectIsCollapsed = (state: { sidebar: SidebarState }) =>
+  state.sidebar.isCollapsed;
+export const selectIsMobileMenuOpen = (state: { sidebar: SidebarState }) =>
+  state.sidebar.isMobileMenuOpen;

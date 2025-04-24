@@ -22,7 +22,7 @@ interface FormData {
   status: string;
 }
 
-// Reusable form input component
+// Form input component
 const FormInput = ({
   label,
   name,
@@ -56,7 +56,7 @@ const FormInput = ({
   </div>
 );
 
-// Reusable select component
+// Select component
 const FormSelect = ({
   label,
   name,
@@ -160,7 +160,6 @@ export default function AddUserModal({
       setImagePreview(null);
       onClose();
     } catch (error) {
-      console.error("Error adding user:", error);
       toast.error("Failed to add user", {
         position: "top-right",
         duration: 4000,

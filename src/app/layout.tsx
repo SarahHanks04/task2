@@ -29,17 +29,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* <ReduxProvider>
-          <AuthenticatedLayout>
-            {children}
-            <Toaster position="top-right" />
-          </AuthenticatedLayout>
-        </ReduxProvider> */}
         <ReduxProvider>
-          <AuthenticatedLayout>
-            {children}
-            
-          </AuthenticatedLayout>
+          <AuthenticatedLayout>{children}</AuthenticatedLayout>
         </ReduxProvider>
       </body>
     </html>

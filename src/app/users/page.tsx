@@ -2,27 +2,36 @@
 
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState, useMemo } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { setLoading, setUsers, setError } from "@/redux/slices/userSlice";
-import { logUserAction } from "@/redux/slices/userActionsSlice";
-import { getUsers, updateUser } from "@/services/users";
-import { RootState, AppDispatch } from "@/redux/store";
 import {
-  DashboardUser,
-  SearchComponentProps,
-  PaginationProps,
-  EllipsisDropdownProps,
-} from "@/types/dashboard";
+  setLoading,
+  setUsers,
+  setError,
+  fetchUsers,
+} from "@/redux/slices/userSlice";
+import { logUserAction } from "@/redux/slices/userActionsSlice";
+import { updateUser } from "@/services/users";
+import { RootState, AppDispatch } from "@/redux/store";
+import { DashboardUser } from "@/types/dashboard";
 import Loading from "@/app/loading";
 import toast from "react-hot-toast";
 import { formatDate } from "@/utils/dashboard-util/helpers";
 import SearchComponent from "@/components/search";
 import Pagination from "@/components/pagination";
 import EllipsisDropdown from "@/components/ellipsisDropdown";
+import { storage } from "@/utils/storage";
+import {
+  selectUsers,
+  selectUsersLoading,
+  selectUsersError,
+  selectTotalUsers,
+  selectTotalPages,
+} from "@/redux/selectors/userSelectors";
 
-// Reusable StatusBadge component
+// StatusBadge component
 function StatusBadge({ status }: { status: string }) {
   const normalizedStatus = (status || "Active").toLowerCase();
   const badgeStyles: Record<string, string> = {
@@ -41,7 +50,7 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-// Table column configuration
+// Table column
 interface ColumnConfig {
   key: keyof DashboardUser | "name" | "actions";
   label: string;
@@ -59,14 +68,17 @@ interface FormProps {
 
 export default function Users() {
   const dispatch = useDispatch<AppDispatch>();
-  const { users, loading, error } = useSelector(
-    (state: RootState) => state.users
-  );
-  const { user: loggedInUser } = useSelector((state: RootState) => state.auth);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const users = useSelector(selectUsers);
+  const loading = useSelector(selectUsersLoading);
+  const error = useSelector(selectUsersError);
+  const totalUsers = useSelector(selectTotalUsers);
+  const totalPages = useSelector(selectTotalPages);
   const [filteredUsers, setFilteredUsers] = useState<DashboardUser[]>([]);
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
   const {
     register,
@@ -84,33 +96,38 @@ export default function Users() {
     },
   });
 
-  // Fetch users on mount
+  // Fetch users based on current page
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchPagedUsers = async () => {
       dispatch(setLoading());
       try {
-        const data = await getUsers();
-        dispatch(setUsers(data));
-        setFilteredUsers(data);
+        await dispatch(
+          fetchUsers({ page: currentPage, per_page: itemsPerPage })
+        ).unwrap();
       } catch (err) {
         dispatch(
           setError(err instanceof Error ? err.message : "Failed to fetch users")
         );
       }
     };
-    fetchUsers();
-  }, [dispatch]);
+    fetchPagedUsers();
+  }, [dispatch, currentPage]);
 
-  // Update state and localStorage
+  useEffect(() => {
+    setFilteredUsers(users);
+  }, [users]);
+
   const updateUsers = (
     newUsers: DashboardUser[],
-    action: "added" | "updated",
+    action: "added" | "updated" | "deleted",
     updatedUser?: DashboardUser
   ) => {
-    dispatch(setUsers(newUsers));
+    const total = newUsers.length;
+    const total_pages = Math.ceil(total / itemsPerPage);
+    dispatch(setUsers({ users: newUsers, total, total_pages }));
     setFilteredUsers(newUsers);
-    localStorage.setItem("localUsers", JSON.stringify(newUsers));
-    if (updatedUser) {
+    storage.setLocalUsers(newUsers);
+    if (updatedUser && action !== "deleted") {
       dispatch(
         logUserAction({
           actionType: action,
@@ -128,7 +145,7 @@ export default function Users() {
     }
   };
 
-  // Handle user update
+  // User update
   const onEditSave: SubmitHandler<DashboardUser> = async (data) => {
     if (!editingUserId) return;
     try {
@@ -141,9 +158,9 @@ export default function Users() {
       };
       const response = await updateUser(editingUserId, updatedUserData);
       const updatedUsers = users.map((user) =>
-        user.id === editingUserId ? { ...response, ...updatedUserData } : user
+        user.id === editingUserId ? response : user
       );
-      updateUsers(updatedUsers, "updated", updatedUserData);
+      updateUsers(updatedUsers, "updated", response);
       setEditingUserId(null);
       reset();
       toast.success("User updated successfully!", { duration: 2000 });
@@ -174,10 +191,17 @@ export default function Users() {
     reset();
   };
 
-  // Handle user added
+  // user added
   const handleUserAdded = (newUser: DashboardUser) => {
-    const updatedUsers = [newUser, ...users];
+    const updatedUsers = [newUser, ...users.filter((u) => u.id !== newUser.id)];
     updateUsers(updatedUsers, "added", newUser);
+  };
+
+  // Page change
+  const handlePageChange = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`/users?${params.toString()}`);
   };
 
   // Table columns
@@ -342,7 +366,13 @@ export default function Users() {
                 user={user}
                 onEdit={onEditStart}
                 users={users}
-                setUsers={(updatedUsers) => dispatch(setUsers(updatedUsers))}
+                setUsers={(updatedUsers) => {
+                  const total = updatedUsers.length;
+                  const total_pages = Math.ceil(total / itemsPerPage);
+                  dispatch(
+                    setUsers({ users: updatedUsers, total, total_pages })
+                  );
+                }}
                 setFilteredUsers={setFilteredUsers}
               />
             </div>
@@ -362,9 +392,8 @@ export default function Users() {
 
   // Pagination
   const paginatedUsers = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredUsers.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredUsers, currentPage]);
+    return filteredUsers;
+  }, [filteredUsers]);
 
   if (loading) return <Loading />;
   if (error)
@@ -440,9 +469,11 @@ export default function Users() {
           </tbody>
         </table>
         <Pagination
-          totalItems={filteredUsers.length}
+          totalItems={totalUsers}
           itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
         />
       </div>
     </div>

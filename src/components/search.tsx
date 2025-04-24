@@ -6,7 +6,7 @@ import { SearchComponentProps } from "@/types/dashboard";
 import { filterUsers } from "@/utils/dashboard-util/helpers";
 import AddUserButton from "@/app/users/users-util/add-users-button";
 
-// Search input 
+// Search input
 const SearchInput = ({
   searchQuery,
   setSearchQuery,
@@ -46,7 +46,7 @@ export default function SearchComponent({
 }: SearchComponentProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter users when searchQuery or users change
+  // Filter users
   useEffect(() => {
     const filtered = filterUsers(users, searchQuery);
     onFilteredUsers(filtered);
@@ -57,7 +57,6 @@ export default function SearchComponent({
     setSearchQuery("");
   }, []);
 
-  // Check if there are no results
   const hasNoResults =
     searchQuery && filterUsers(users, searchQuery).length === 0;
 

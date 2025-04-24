@@ -7,7 +7,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { loginUser } from "@/services/auth";
 import { loginSuccess } from "@/redux/slices/authSlice";
-import { LoginFormValues, MockedUser } from "@/types/login";
+import { LoginFormValues } from "@/types/login";
 
 const initialValues: LoginFormValues = {
   email: "",
@@ -37,18 +37,6 @@ export default function Login() {
   ) => {
     try {
       const response = await loginUser(values.email, values.password);
-      //   const isMockToken = response.token.startsWith("mock-token-");
-
-      //   let userName = "User";
-      //   if (isMockToken) {
-      //     const mockedUsers: MockedUser[] = JSON.parse(
-      //       localStorage.getItem("mockedUsers") || "[]"
-      //     );
-      //     const user = mockedUsers.find(
-      //       (u) => u.email.toLowerCase() === values.email.toLowerCase()
-      //     );
-      //     if (user?.name) userName = user.name;
-      //   }
       const userName = response.name || "User";
 
       dispatch(

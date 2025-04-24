@@ -2,19 +2,34 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { getUsers, getUserById } from "@/services/users";
 import { DashboardUser, UserState } from "@/types/dashboard";
 
+// Interface for pagination params
+interface FetchUsersParams {
+  page?: number;
+  per_page?: number;
+}
+
+// Paginated response
+interface PaginatedUsers {
+  users: DashboardUser[];
+  total: number;
+  total_pages: number;
+}
+
 const initialState: UserState = {
   users: [],
   selectedUser: null,
   loading: false,
   error: null,
+  totalUsers: 0,
+  totalPages: 1,
 };
 
 export const fetchUsers = createAsyncThunk(
   "users/fetchUsers",
-  async (_, { rejectWithValue }) => {
+  async ({ page = 1, per_page = 6 }: FetchUsersParams, { rejectWithValue }) => {
     try {
-      const users = await getUsers();
-      return users;
+      const response = await getUsers(page, per_page);
+      return response;
     } catch (error) {
       return rejectWithValue(
         error instanceof Error ? error.message : "An unknown error occurred"
@@ -45,8 +60,17 @@ const userSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    setUsers: (state: UserState, action: PayloadAction<DashboardUser[]>) => {
-      state.users = action.payload;
+    setUsers: (
+      state: UserState,
+      action: PayloadAction<{
+        users: DashboardUser[];
+        total: number;
+        total_pages: number;
+      }>
+    ) => {
+      state.users = action.payload.users;
+      state.totalUsers = action.payload.total;
+      state.totalPages = action.payload.total_pages;
       state.loading = false;
     },
     setError: (state: UserState, action: PayloadAction<string>) => {
@@ -67,10 +91,15 @@ const userSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchUsers.fulfilled, (state, action) => {
-        state.users = action.payload;
-        state.loading = false;
-      })
+      .addCase(
+        fetchUsers.fulfilled,
+        (state, action: PayloadAction<PaginatedUsers>) => {
+          state.users = action.payload.users;
+          state.totalUsers = action.payload.total;
+          state.totalPages = action.payload.total_pages;
+          state.loading = false;
+        }
+      )
       .addCase(fetchUsers.rejected, (state, action) => {
         state.error = action.payload as string;
         state.loading = false;

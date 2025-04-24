@@ -19,7 +19,7 @@ interface FormData {
   phoneNumber: string;
 }
 
-// Input Field 
+// Input Field
 const InputField = ({
   label,
   name,
@@ -73,7 +73,7 @@ export default function Profile() {
     phoneNumber: "",
   });
 
-  // Initialize user data
+  // User data
   useEffect(() => {
     const initializeUser = () => {
       const token = localStorage.getItem("token");
@@ -118,14 +118,14 @@ export default function Profile() {
     initializeUser();
   }, [dispatch, router, user, isAuthenticated]);
 
-  // Redirect if not authenticated
+  // If not authenticated
   useEffect(() => {
     if (!isAuthenticated && !isLoading) {
       router.push("/login");
     }
   }, [isAuthenticated, isLoading, router]);
 
-  // Handle avatar upload
+  // Avatar upload
   const handleAvatarChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
@@ -142,7 +142,7 @@ export default function Profile() {
     [user?.email]
   );
 
-  // Handle input changes
+  // Input changes
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
@@ -151,7 +151,7 @@ export default function Profile() {
     []
   );
 
-  // Save profile changes
+  // Profile changes
   const handleSave = useCallback(() => {
     if (!user?.email) return;
 
@@ -169,7 +169,6 @@ export default function Profile() {
       storage.setMockedUsers(mockedUsers);
     }
 
-    // Update Redux state
     dispatch(
       loginSuccess({
         user: {

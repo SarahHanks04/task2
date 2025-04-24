@@ -21,13 +21,13 @@ export const handleApiError = (
     errorDetails.message = error.message;
   }
 
-  isBrowser
-    ? console.error(`${context} (client):`, errorDetails)
-    : console.error(`${context} (server):`, {
-        message: errorDetails.message,
-        status: errorDetails.status,
-        stack: error instanceof Error ? error.stack : undefined,
-      });
+  // isBrowser
+  //   ? console.error(`${context} (client):`, errorDetails)
+  //   : console.error(`${context} (server):`, {
+  //       message: errorDetails.message,
+  //       status: errorDetails.status,
+  //       stack: error instanceof Error ? error.stack : undefined,
+  //     });
 
   throw new Error(errorDetails.message);
 };
