@@ -20,7 +20,7 @@ api.interceptors.request.use(
 export const makeRequest = async <T>(
   method: "get" | "post" | "put" | "delete",
   url: string,
-  data?: any
+  data?: unknown
 ): Promise<T> => {
   try {
     const response: AxiosResponse<T> = await api({
