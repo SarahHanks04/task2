@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { getCookie } from "./lib/utils";
+import { getCookie } from "./lib/util";
 import { PROTECTED_ROUTES, PUBLIC_ROUTES } from "./lib/constants";
 
 export async function middleware(req: NextRequest) {
